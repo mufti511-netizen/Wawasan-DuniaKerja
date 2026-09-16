@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Ajar: Customer Requirements & SDLC Integration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --indigo: #1E1B4B;
+            --indigo-light: #2E2A72;
+            --coral: #F97316;
+            --coral-soft: #FFEDD5;
+            --cream: #F8FAFC;
+            --white: #FFFFFF;
+            --text-dark: #0F172A;
+            --text-muted: #475569;
+            --border: #E2E8F0;
+            --accent-blue: #3B82F6;
+            --accent-green: #10B981;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            /* Proteksi seleksi teks bawaan */
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: #0F172A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            overflow: hidden;
+        }
+
+        /* Container Presentation */
+        #presentation {
+            width: 1280px;
+            height: 720px;
+            background-color: var(--cream);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+        }
+
+        /* Watermark */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-25deg);
+            font-family: 'Poppins', sans-serif;
+            font-size: 72px;
+            font-weight: 800;
+            color: var(--indigo);
+            opacity: 0.10; /* Opacity 20% */
+            pointer-events: none;
+            z-index: 99;
+            white-space: nowrap;
+            letter-spacing: 2px;
+        }
+
+        /* Top-Left Header Logo untuk Slide 2 ke atas */
+        .slide-header-brand {
+            position: absolute;
+            top: 20px;
+            left: 70px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 90;
+            transition: opacity 0.3s ease;
+        }
+        .slide-header-brand img {
+            height: 38px;
+            width: auto;
+        }
+        .slide-header-brand span {
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--indigo);
+            letter-spacing: 0.5px;
+        }
+
+        /* Top Progress Bar */
+        .progress-bar-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(226, 232, 240, 0.8);
+            z-index: 100;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--indigo) 0%, var(--coral) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 70px 70px 70px 70px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: translateY(15px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--indigo);
+        }
+
+        h1 { font-size: 48px; line-height: 1.15; margin-bottom: 12px; font-weight: 800; }
+        h2 { font-size: 34px; margin-bottom: 20px; border-left: 6px solid var(--coral); padding-left: 18px; line-height: 1.2; }
+        h3 { font-size: 24px; color: var(--indigo); font-weight: 700; }
+        h4 { font-size: 18px; color: var(--coral); font-weight: 600; }
+        p, li { font-size: 18px; line-height: 1.6; color: var(--text-muted); }
+        
+        .highlight { color: var(--coral); font-weight: 700; }
+        .highlight-blue { color: var(--accent-blue); font-weight: 700; }
+
+        /* Layout Utilities */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            flex-grow: 1;
+            align-items: stretch;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            flex-grow: 1;
+        }
+
+        .content-center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+        }
+
+        /* Cards & Boxes */
+        .box {
+            background: var(--white);
+            padding: 24px;
+            border-radius: 12px;
+            border-top: 5px solid var(--coral);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .box-indigo {
+            background: var(--indigo);
+            color: var(--white);
+            border-top: 5px solid var(--coral);
+        }
+        .box-indigo h3, .box-indigo p, .box-indigo li { color: var(--white); }
+
+        .badge {
+            background: var(--coral-soft);
+            color: var(--coral);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Interactive Tabs */
+        .tab-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            background: var(--white);
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--indigo);
+            color: var(--white);
+            border-color: var(--indigo);
+        }
+        .tab-content {
+            display: none;
+            background: var(--white);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            flex-grow: 1;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        th, td {
+            padding: 14px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 16px;
+        }
+        th {
+            background-color: var(--indigo);
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Timeline / SDLC Flow */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 30px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--indigo);
+            z-index: 1;
+        }
+        .timeline-step {
+            position: relative;
+            z-index: 2;
+            width: 23%;
+            background: var(--white);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            text-align: center;
+        }
+        .timeline-circle {
+            width: 44px;
+            height: 44px;
+            background: var(--coral);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 20px;
+            margin: -36px auto 12px auto;
+            border: 4px solid var(--cream);
+        }
+
+        /* Document Spec Box */
+        .doc-spec {
+            background: #FFFFFF;
+            color: var(--text-dark);
+            padding: 20px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            max-height: 430px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        /* Controls Footer */
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn {
+            background: var(--indigo);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn:hover { background: var(--coral); transform: translateY(-1px); }
+        .slide-counter {
+            position: absolute;
+            bottom: 25px;
+            left: 70px;
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--indigo);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        /* Quick Jump Drawer */
+        .menu-btn {
+            background: var(--white);
+            color: var(--indigo);
+            border: 1px solid var(--border);
+        }
+        .jump-menu {
+            position: absolute;
+            bottom: 70px;
+            right: 40px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: none;
+            max-height: 350px;
+            overflow-y: auto;
+            z-index: 101;
+            width: 280px;
+        }
+        .jump-menu.active { display: block; }
+        .jump-item {
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-dark);
+            transition: background 0.2s;
+        }
+        .jump-item:hover { background: var(--coral-soft); color: var(--coral); }
+
+        .img-placeholder {
+            width: 100%;
+            height: 100%;
+            max-height: 380px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="presentation">
+        <!-- Watermark -->
+        <div class="watermark">Mufti Adiyatma 2026</div>
+
+        <!-- Progress Bar Top -->
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Top-Left Header Brand (Tampil dari Slide 2 - 15) -->
+        <div id="slideHeaderBrand" class="slide-header-brand" style="display: none;">
+            <img src="logo.png" alt="Logo RPL">
+            <span>Rekayasa Perangkat Lunak</span>
+        </div>
+        
+        <!-- Slide 1: Judul, Logo Center, & Guru Pengampu -->
+        <div class="slide active">
+            <div class="content-center">
+                <!-- Logo Awal Slide (Atas Tengah) -->
+                <img src="logo.png" alt="Logo RPL" style="height: 110px; width: auto; margin-bottom: 16px;">
+                
+                <span class="badge">Fase E - Rekayasa Perangkat Lunak (RPL)</span>
+                <h1>Konsep Dasar<br><span class="highlight">Kebutuhan Pengguna</span></h1>
+                
+                <!-- Nama Guru Pengampu dibawah tulisan Kebutuhan Pengguna -->
+                <p style="font-size: 18px; font-weight: 700; color: var(--indigo); margin-top: 4px; margin-bottom: 12px;">
+                    Guru Pengampu: <span style="color: var(--coral);">Mufti Adiyatma A.Md.Kom</span>
+                </p>
+
+                <p style="max-width: 820px; text-align: center; font-size: 18px; color: var(--text-muted);">
+                    Menerjemahkan keinginan klien menjadi spesifikasi sistem terstruktur, analisis efisien, serta integrasi utuh dalam siklus SDLC.
+                </p>
+                <div class="box" style="margin-top: 25px; max-width: 900px; text-align: left;">
+                    <h3 style="margin-bottom: 6px; font-size: 20px;">Capaian Pembelajaran (CP) & Tujuan</h3>
+                    <p style="font-size: 15px;">
+                        Siswa mampu menganalisis dan membedakan kebutuhan fungsional vs non-fungsional, mempraktikkan teknik elisitasi via <em>Deep Listening</em>, menyusun dokumen SRS standar industri, dan memahami turunan kebutuhan ke fase SDLC.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Skenario Biro Jodoh -->
+        <div class="slide">
+            <h2>Skenario Simulasi: "Biro Jodoh Aplikasi"</h2>
+            <div class="grid-2">
+                <div style="display: flex; flex-direction: column; justify-content: center; gap: 16px;">
+                    <div class="box" style="border-top-color: var(--indigo);">
+                        <h3 style="color: var(--indigo); font-size: 20px; margin-bottom: 6px;">Klien Bawel (Pemilik Sekolah / TU)</h3>
+                        <p style="font-size: 16px; font-style: italic;">"Saya mau aplikasi keuangan SPP yang kalau diklik langsung otomatis nagih ke WhatsApp orang tua, warnanya meriah bikin adem, dan sistemnya anti-down walau dibuka 10.000 orang serentak!"</p>
+                    </div>
+                    <div class="box">
+                        <h3 style="font-size: 20px; margin-bottom: 6px;">System Analyst (Siswa RPL)</h3>
+                        <p style="font-size: 16px; font-style: italic;">"Mari kita bedah, Pak. 'Otomatik nagih' adalah fungsi utama sistem (Fungsional), sedangkan 'Anti-down 10.000 user' adalah kriteria performa (Non-Fungsional)."</p>
+                    </div>
+                </div>
+                <div>
+                    <img src="https://placehold.co/600x420/1E1B4B/FFFFFF?text=Simulasi+Roleplay\nKlien+Bawel+vs+Requirement+Analyst" alt="Ilustrasi Roleplay" class="img-placeholder">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Konsep Kebutuhan -->
+        <div class="slide">
+            <h2>Apa itu Customer Requirements?</h2>
+            <p style="margin-bottom: 20px;">Spesifikasi layanan dan batasan yang diminta oleh pelanggan. Terbagi menjadi 2 pilar utama:</p>
+            <div class="grid-2">
+                <div class="box">
+                    <h3 style="color: var(--indigo); margin-bottom: 10px;">1. Kebutuhan Fungsional</h3>
+                    <p style="font-size: 16px; margin-bottom: 12px;">Mendefinisikan <strong style="color: var(--indigo);">APA</strong> yang harus dilakukan oleh sistem (fitur & fungsi langsung).</p>
+                    <ul style="font-size: 15px; padding-left: 20px;">
+                        <li>Input, pengolahan data, dan output informasi.</li>
+                        <li>Contoh: "Sistem menerbitkan kuitansi pembayaran SPP otomatis."</li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <h3 style="color: var(--coral); margin-bottom: 10px;">2. Kebutuhan Non-Fungsional</h3>
+                    <p style="font-size: 16px; margin-bottom: 12px;">Mendefinisikan <strong style="color: var(--coral);">BAGAIMANA</strong> kualitas dan batasan kerja sistem.</p>
+                    <ul style="font-size: 15px; padding-left: 20px;">
+                        <li>Performa, Keamanan, Skalabilitas, Kemudahan UI/UX.</li>
+                        <li>Contoh: "Waktu muat halaman pembayaran maksimal 2 detik."</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Pertanyaan Elisitasi Requirement Analyst -->
+        <div class="slide">
+            <h2>Contoh Pertanyaan Elisitasi Analyst</h2>
+            <p style="margin-bottom: 15px;">Klik tab di bawah untuk melihat contoh pertanyaan kunci berdasarkan perspektif stakeholder:</p>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab(this, 'q-bisnis')">1. Bisnis & Tujuan</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'q-proses')">2. Proses & Alur Kerja</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'q-user')">3. Pengguna & Akses</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'q-teknis')">4. Teknis & Non-Fungsional</button>
+                </div>
+
+                <div id="q-bisnis" class="tab-content active">
+                    <h3>Pertanyaan Tingkat Bisnis (Kepala Sekolah / Manajer)</h3>
+                    <ul style="margin-top: 15px; font-size: 16px; padding-left: 20px; line-height: 1.8;">
+                        <li>"Apa masalah terbesar dari proses pencatatan keuangan manual saat ini?"</li>
+                        <li>"Apa tolok ukur utama keberhasilan sistem baru ini? (Misal: penurunan tunggakan SPP 30%)"</li>
+                        <li>"Apakah ada batasan waktu (deadline rilis) dan batasan anggaran proyek?"</li>
+                    </ul>
+                </div>
+
+                <div id="q-proses" class="tab-content">
+                    <h3>Pertanyaan Proses & Alur Kerja (Staf TU / Admin)</h3>
+                    <ul style="margin-top: 15px; font-size: 16px; padding-left: 20px; line-height: 1.8;">
+                        <li>"Dapatkah Anda menceritakan alur penagihan SPP dari tanggal 1 hingga akhir bulan?"</li>
+                        <li>"Bagaimana Anda menangani siswa yang mendapat potongan beasiswa atau cicilan?"</li>
+                        <li>"Laporan keuangan seperti apa yang wajib diserahkan kepada Kepala Sekolah setiap bulannya?"</li>
+                    </ul>
+                </div>
+
+                <div id="q-user" class="tab-content">
+                    <h3>Pertanyaan Pengguna & Akses (Siswa & Orang Tua)</h3>
+                    <ul style="margin-top: 15px; font-size: 16px; padding-left: 20px; line-height: 1.8;">
+                        <li>"Siapa saja yang berhak melihat rincian tagihan? (Apakah Siswa, Orang Tua, atau keduanya?)"</li>
+                        <li>"Apakah perlu fitur notifikasi pengingat pembayaran langsung via WhatsApp/Email?"</li>
+                        <li>"Apakah data siswa lama perlu diimpor dari Excel ke dalam sistem baru ini?"</li>
+                    </ul>
+                </div>
+
+                <div id="q-teknis" class="tab-content">
+                    <h3>Pertanyaan Teknis & Kualitas (IT / Infrastruktur)</h3>
+                    <ul style="margin-top: 15px; font-size: 16px; padding-left: 20px; line-height: 1.8;">
+                        <li>"Berapa estimasi jumlah pengguna yang mengakses bersamaan saat tenggat bayar?"</li>
+                        <li>"Metode pembayaran apa saja yang akan terhubung? (Bank Transfer, Payment Gateway, QRIS)"</li>
+                        <li>"Berapa tingkat toleransi *downtime* sistem yang diizinkan?"</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Best Practices Requirement Analyst -->
+        <div class="slide">
+            <h2>Best Practices Requirement Analyst</h2>
+            <div class="grid-4" style="margin-top: 10px;">
+                <div class="box">
+                    <span class="badge" style="background: #DBEAFE; color: #1E40AF;">Practices 1</span>
+                    <h3 style="font-size: 18px; margin-bottom: 8px;">Identifikasi Seluruh Stakeholder</h3>
+                    <p style="font-size: 14px;">Jangan hanya wawancara pimpinan yang memesan, tapi wawancarai juga staf TU yang akan menggunakan aplikasi setiap hari.</p>
+                </div>
+                <div class="box">
+                    <span class="badge" style="background: #FCE7F3; color: #9D174D;">Practices 2</span>
+                    <h3 style="font-size: 18px; margin-bottom: 8px;">Prioritas MoSCoW</h3>
+                    <p style="font-size: 14px;">
+                        <strong>Must:</strong> Fitur Wajib.<br>
+                        <strong>Should:</strong> Sangat Penting.<br>
+                        <strong>Could:</strong> Pemanis/Bonus.<br>
+                        <strong>Won't:</strong> Ditunda dulu.
+                    </p>
+                </div>
+                <div class="box">
+                    <span class="badge" style="background: #D1FAE5; color: #065F46;">Practices 3</span>
+                    <h3 style="font-size: 18px; margin-bottom: 8px;">Prinsip S.M.A.R.T</h3>
+                    <p style="font-size: 14px;">Pastikan tiap poin spesifikasi bernilai <em>Specific, Measurable, Achievable, Relevant,</em> dan <em>Testable</em> (Bisa diuji).</p>
+                </div>
+                <div class="box">
+                    <span class="badge" style="background: #FEF3C7; color: #92400E;">Practices 4</span>
+                    <h3 style="font-size: 18px; margin-bottom: 8px;">Visualisasi Awal</h3>
+                    <p style="font-size: 14px;">Buat <em>wireframe</em> kasar atau diagram alur (BPMN) agar klien memiliki persepsi visual yang sama sebelum *coding*.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Contoh Hasil Analisis / SRS Dokumen Lengkap -->
+        <div class="slide">
+            <h2>Contoh Hasil Analisis: Dokumen SRS Lengkap</h2>
+            <p style="margin-bottom: 12px; font-size: 15px;">Dokumen <strong>Software Requirements Specification (SRS)</strong> standar industri yang rapi dan mudah dipahami:</p>
+            
+            <div class="doc-spec">
+                <div style="text-align: center; border-bottom: 2px solid var(--indigo); padding-bottom: 10px; margin-bottom: 16px;">
+                    <h3 style="font-size: 18px; color: var(--indigo); margin-bottom: 4px;">DOKUMEN SPESIFIKASI KEBUTUHAN PERANGKAT LUNAK (SRS)</h3>
+                    <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Sistem Informasi Keuangan Sekolah (Modul SPP Otomatis) | Versi 1.0.0 | System Analyst RPL</p>
+                </div>
+
+                <!-- Section 1 & 2 -->
+                <div style="margin-bottom: 16px;">
+                    <h4 style="font-size: 15px; color: var(--indigo); border-left: 4px solid var(--coral); padding-left: 8px; margin-bottom: 8px;">1. Pendahuluan & Profil Pengguna</h4>
+                    <p style="font-size: 13px; margin-bottom: 6px; color: var(--text-dark);"><strong>1.1 Tujuan:</strong> Menetapkan spesifikasi kebutuhan fungsional dan non-fungsional untuk otomatisasi pencatatan, penagihan, dan pelaporan SPP bulanan.</p>
+                    <p style="font-size: 13px; margin-bottom: 6px; color: var(--text-dark);"><strong>1.2 Profil Pengguna:</strong></p>
+                    <ul style="font-size: 13px; padding-left: 20px; color: var(--text-muted);">
+                        <li><strong>Admin TU:</strong> Mengelola tagihan, memverifikasi pembayaran, input beasiswa, dan mencetak laporan.</li>
+                        <li><strong>Siswa / Orang Tua:</strong> Melihat rincian tagihan, mengunduh kuitansi PDF, menerima notifikasi.</li>
+                        <li><strong>Kepala Sekolah:</strong> Memantau dasbor eksekutif terkait persentase kelancaran bayar & tunggakan.</li>
+                    </ul>
+                </div>
+
+                <!-- Section 3 -->
+                <div style="margin-bottom: 16px;">
+                    <h4 style="font-size: 15px; color: var(--indigo); border-left: 4px solid var(--coral); padding-left: 8px; margin-bottom: 8px;">2. Kebutuhan Fungsional (Functional Requirements)</h4>
+                    <table style="font-size: 12px; margin-top: 6px; width: 100%;">
+                        <thead>
+                            <tr style="background: var(--indigo); color: white;">
+                                <th style="padding: 8px; width: 10%;">ID</th>
+                                <th style="padding: 8px; width: 22%;">Nama Fitur</th>
+                                <th style="padding: 8px; width: 48%;">Deskripsi Kebutuhan</th>
+                                <th style="padding: 8px; width: 20%;">Aktor Utama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 8px; font-weight: 700; color: var(--indigo);">FR-01</td>
+                                <td style="padding: 8px;">Auto-Generate Tagihan</td>
+                                <td style="padding: 8px;">Sistem wajib menerbitkan baris tagihan SPP baru secara otomatis setiap tanggal 1 pukul 00:01 WIB.</td>
+                                <td style="padding: 8px;">Sistem (Cron-job)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; font-weight: 700; color: var(--indigo);">FR-02</td>
+                                <td style="padding: 8px;">Kelola Diskon/Beasiswa</td>
+                                <td style="padding: 8px;">Admin TU dapat menerapkan potongan harga (persentase/nominal) pada siswa penerima beasiswa.</td>
+                                <td style="padding: 8px;">Admin TU</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; font-weight: 700; color: var(--indigo);">FR-03</td>
+                                <td style="padding: 8px;">Cetak Kuitansi PDF</td>
+                                <td style="padding: 8px;">Sistem dapat mengekspor bukti pembayaran sah berstempel digital sekolah dalam format PDF.</td>
+                                <td style="padding: 8px;">Admin TU, Siswa</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; font-weight: 700; color: var(--indigo);">FR-04</td>
+                                <td style="padding: 8px;">Notifikasi Pengingat</td>
+                                <td style="padding: 8px;">Sistem mengirimkan pesan pengingat tagihan otomatis via WhatsApp API ke orang tua tiap tanggal 5.</td>
+                                <td style="padding: 8px;">Sistem</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; font-weight: 700; color: var(--indigo);">FR-05</td>
+                                <td style="padding: 8px;">Dasbor Eksekutif</td>
+                                <td style="padding: 8px;">Sistem menampilkan grafik ringkasan total pemasukan dan rekapitulasi tunggakan secara real-time.</td>
+                                <td style="padding: 8px;">Kepala Sekolah</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Section 4 -->
+                <div style="margin-bottom: 16px;">
+                    <h4 style="font-size: 15px; color: var(--indigo); border-left: 4px solid var(--coral); padding-left: 8px; margin-bottom: 8px;">3. Kebutuhan Non-Fungsional (Non-Functional Requirements)</h4>
+                    <table style="font-size: 12px; margin-top: 6px; width: 100%;">
+                        <thead>
+                            <tr style="background: var(--coral); color: white;">
+                                <th style="padding: 8px; width: 12%;">ID</th>
+                                <th style="padding: 8px; width: 20%;">Kategori</th>
+                                <th style="padding: 8px; width: 68%;">Spesifikasi & Indikator Keberhasilan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 8px; font-weight: 700; color: var(--coral);">NFR-01</td>
+                                <td style="padding: 8px;">Performa</td>
+                                <td style="padding: 8px;">Waktu muat (response time) halaman utama tidak boleh melebihi 2 detik pada beban puncak.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; font-weight: 700; color: var(--coral);">NFR-02</td>
+                                <td style="padding: 8px;">Keamanan</td>
+                                <td style="padding: 8px;">Katasandi pengguna wajib dienkripsi algoritma bcrypt & endpoint API dilindungi otentikasi JWT.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; font-weight: 700; color: var(--coral);">NFR-03</td>
+                                <td style="padding: 8px;">Skalabilitas</td>
+                                <td style="padding: 8px;">Arsitektur basis data sanggup menangani hingga 500 pengguna bersamaan (concurrent users).</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; font-weight: 700; color: var(--coral);">NFR-04</td>
+                                <td style="padding: 8px;">Ketersediaan</td>
+                                <td style="padding: 8px;">Sistem menjamin tingkat ketersediaan (uptime) minimal 99,5% dalam periode satu bulan.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Section 5 -->
+                <div>
+                    <h4 style="font-size: 15px; color: var(--indigo); border-left: 4px solid var(--coral); padding-left: 8px; margin-bottom: 8px;">4. Prioritas Pengembangan (Matriks MoSCoW)</h4>
+                    <div style="background: var(--cream); padding: 12px; border-radius: 8px; font-size: 12px; border: 1px solid var(--border);">
+                        <p style="margin-bottom: 4px;"><strong>Must Have:</strong> FR-01 (Auto Tagihan), FR-02 (Diskon), FR-03 (Kuitansi PDF), NFR-01, NFR-02.</p>
+                        <p style="margin-bottom: 4px;"><strong>Should Have:</strong> FR-04 (Notifikasi WhatsApp), FR-05 (Dasbor Eksekutif), NFR-03.</p>
+                        <p style="margin-bottom: 4px;"><strong>Could Have:</strong> Integrasi pembayaran otomatis via Payment Gateway (QRIS / Virtual Account).</p>
+                        <p style="margin: 0;"><strong>Won't Have:</strong> Fitur pengajuan cicilan tagihan mandiri oleh siswa (Ditunda ke Versi 2.0).</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Slide 7: Turunan Kebutuhan SPP Otomatis -->
+        <div class="slide">
+            <h2>Turunan Kebutuhan Sistem SPP Otomatis</h2>
+            <div class="grid-2">
+                <div class="box" style="border-top-color: var(--indigo);">
+                    <h3 style="color: var(--indigo); font-size: 20px; margin-bottom: 12px;">Turunan Kebutuhan Fungsional (Fitur)</h3>
+                    <ul style="font-size: 15px; padding-left: 20px; line-height: 1.8;">
+                        <li><strong>Engine Penagihan:</strong> Sistem mengeksekusi <em>cron-job</em> bulanan untuk menggenerate tagihan SPP.</li>
+                        <li><strong>Manajemen Diskon:</strong> Admin TU dapat memasukkan besaran beasiswa (potongan 10% - 100%).</li>
+                        <li><strong>Modul Kuitansi:</strong> Ekspor bukti pembayaran otomatis ke format PDF.</li>
+                        <li><strong>Notifikasi:</strong> Kirim pengingat tagihan via API WhatsApp Gateway.</li>
+                    </ul>
+                </div>
+                <div class="box" style="border-top-color: var(--coral);">
+                    <h3 style="color: var(--coral); font-size: 20px; margin-bottom: 12px;">Turunan Kebutuhan Non-Fungsional (Kualitas)</h3>
+                    <ul style="font-size: 15px; padding-left: 20px; line-height: 1.8;">
+                        <li><strong>Performa:</strong> <em>Dashboard</em> utama mampu dimuat dalam waktu &lt; 2 detik.</li>
+                        <li><strong>Keamanan Data:</strong> Password akun terenkripsi menggunakan algoritma <code>bcrypt</code> dan proteksi JWT.</li>
+                        <li><strong>Skalabilitas:</strong> Aplikasi mampu menangani hingga 500 <em>concurrent users</em> tanpa penurunan performa.</li>
+                        <li><strong>Ketersediaan:</strong> Uptime server minimal 99.5% per bulan.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Tabel Matriks Perbandingan -->
+        <div class="slide">
+            <h2>Matriks Perbandingan Kebutuhan</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspek Perbandingan</th>
+                        <th>Kebutuhan Fungsional</th>
+                        <th>Kebutuhan Non-Fungsional</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Fokus Utama</strong></td>
+                        <td>Tindakan sistem (Fitur & Fungsi)</td>
+                        <td>Kinerja sistem (Kualitas aplikasi)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sifat Kehadiran</strong></td>
+                        <td>Wajib ada (Tanpanya aplikasi gagal)</td>
+                        <td>Kritis untuk kepuasan pengguna</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pengujian (QA)</strong></td>
+                        <td><em>Functional testing</em> (Unit Test, Integration)</td>
+                        <td><em>Non-functional testing</em> (Load Test, Security)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contoh di Sistem SPP</strong></td>
+                        <td>"Admin dapat mencetak kuitansi PDF"</td>
+                        <td>"File PDF dicetak dalam waktu &lt; 1 detik"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 9: Scope Creep -->
+        <div class="slide">
+            <h2>Dinamika Spesifikasi (Scope Creep)</h2>
+            <div class="grid-2">
+                <div>
+                    <p style="margin-bottom: 16px;"><strong>Scope Creep</strong> adalah kondisi di mana fitur proyek bertambah terus-menerus di luar kesepakatan awal.</p>
+                    <div class="box">
+                        <h4 style="color: var(--coral); margin-bottom: 8px;">Mengapa Perubahan Terjadi?</h4>
+                        <ul style="font-size: 15px; padding-left: 18px;">
+                            <li>Klien baru menyadari kebutuhannya setelah melihat *prototype*.</li>
+                            <li>Munculnya aturan/regulasi baru dari pemerintah/sekolah.</li>
+                            <li>Miskomunikasi awal saat *requirement gathering*.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="box box-indigo">
+                    <h3 style="color: var(--coral); margin-bottom: 12px;">Solusi Penanganan:</h3>
+                    <ol style="font-size: 15px; padding-left: 20px; line-height: 1.8;">
+                        <li><strong>Dokumen SRS Tertulis:</strong> Menjadi acuan resmi kesepakatan awal.</li>
+                        <li><strong>Change Control Procedure:</strong> Fitur tambahan baru harus dihitung biaya & tambahan waktunya.</li>
+                        <li><strong>Deep Listening:</strong> Gali masalah mendalam agar tidak ada fitur tersembunyi.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Integrasi Hasil Analisis ke SDLC -->
+        <div class="slide">
+            <h2>Kaitan Hasil Analisis ke Fase SDLC Next Step</h2>
+            <p style="margin-bottom: 10px;">Dokumen SRS dari tahap analisis memandu seluruh fase SDLC berikutnya:</p>
+            
+            <div class="timeline">
+                <div class="timeline-step">
+                    <div class="timeline-circle">1</div>
+                    <h4 style="color: var(--indigo);">Fase Desain</h4>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">
+                        Kebutuhan Fungsional diubah jadi <strong>ERD & Schema DB (Prisma/MySQL)</strong>. Kebutuhan Non-fungsional menentukan arsitektur server & UI UX.
+                    </p>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-circle">2</div>
+                    <h4 style="color: var(--indigo);">Fase Development</h4>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">
+                        SRS dipecah menjadi <strong>User Stories (Jira/Trello)</strong>. Programmer mengimplementasikan logika kuis/SPP & API endpoint secara terarah.
+                    </p>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-circle">3</div>
+                    <h4 style="color: var(--indigo);">Fase Testing</h4>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">
+                        Tim QA membuat <strong>Test Cases</strong> berdasarkan SRS. Klien melakukan pengujian akhir <strong>User Acceptance Testing (UAT)</strong>.
+                    </p>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-circle">4</div>
+                    <h4 style="color: var(--indigo);">Fase Maintenance</h4>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">
+                        Target performa & kapasitas user pada Kebutuhan Non-fungsional menjadi acuan DevOps untuk setup server cloud & CI/CD.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Deep Listening -->
+        <div class="slide">
+            <h2>Praktik Berkesadaran: <em>Deep Listening</em></h2>
+            <div class="grid-2">
+                <div>
+                    <img src="https://placehold.co/600x380/F97316/FFFFFF?text=Mindful+Active+Listening" alt="Deep Listening" class="img-placeholder">
+                </div>
+                <div class="box">
+                    <h3 style="margin-bottom: 12px;">3 Pilar Deep Listening:</h3>
+                    <ul style="font-size: 15px; padding-left: 20px; line-height: 1.8;">
+                        <li><strong>Hadir Penuh (Presence):</strong> Tahan ego, fokus mendengarkan tanpa memotong pembicaraan klien.</li>
+                        <li><strong>Tunda Penilaian (Suspend Judgment):</strong> Jangan langsung menolak gagasan klien yang aneh; gali alasan di baliknya.</li>
+                        <li><strong>Validasi (Reflecting):</strong> Ulangi ucapan klien dengan bahasa teknis. <em>"Maksud Bapak, tagihan dikirim otomatis tiap tanggal 1?"</em></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Timeline Simulasi -->
+        <div class="slide">
+            <h2>Alur Simulasi "Biro Jodoh Aplikasi"</h2>
+            <div class="timeline" style="margin-top: 40px;">
+                <div class="timeline-step">
+                    <div class="timeline-circle">1</div>
+                    <h4 style="color: var(--indigo);">Pembagian Peran</h4>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">Tentukan Klien Bawel vs System Analyst (5 Mnt).</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-circle">2</div>
+                    <h4 style="color: var(--indigo);">Briefing Klien</h4>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">Klien menyiapkan daftar fitur 'aneh' (10 Mnt).</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-circle">3</div>
+                    <h4 style="color: var(--indigo);">Wawancara & Deep Listening</h4>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">Analis mengajukan pertanyaan elisitasi (20 Mnt).</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-circle">4</div>
+                    <h4 style="color: var(--indigo);">Drafting SRS Simple</h4>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">Pengelompokan Fungsional & Non-Fungsional (15 Mnt).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Refleksi Deep Learning -->
+        <div class="slide">
+            <h2>Refleksi Deep Learning</h2>
+            <div class="content-center">
+                <div class="box box-indigo" style="max-width: 860px; text-align: left;">
+                    <h3 style="color: var(--coral); text-align: center; margin-bottom: 20px;">Pertanyaan Reflektif Diri</h3>
+                    <ul style="font-size: 17px; padding-left: 20px; line-height: 1.8;">
+                        <li style="margin-bottom: 12px;">Apakah saya sudah benar-benar mendengarkan keluhan klien atau sibuk mempertahankan pendapat pribadi?</li>
+                        <li style="margin-bottom: 12px;">Mengapa penting memisahkan mana fitur wajib (*Must Have*) dan mana yang sekadar pemanis (*Nice to Have*)?</li>
+                        <li>Apa dampak fatal bagi tim developer jika melompati fase *Requirement Analysis* dan langsung melompat ke *coding*?</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Glosarium & Referensi -->
+        <div class="slide">
+            <h2>Glosarium & Referensi Valid</h2>
+            <div class="grid-2">
+                <div>
+                    <h3 style="color: var(--indigo); margin-bottom: 10px;">Glosarium</h3>
+                    <ul style="font-size: 15px; padding-left: 18px; line-height: 1.7;">
+                        <li><strong>Elisitasi:</strong> Proses mengumpulkan kebutuhan sistem dari pengguna/klien.</li>
+                        <li><strong>SRS:</strong> <em>Software Requirements Specification</em>.</li>
+                        <li><strong>Scope Creep:</strong> Perubahan ruang lingkup proyek yang tak terkendali.</li>
+                        <li><strong>UAT:</strong> <em>User Acceptance Testing</em> (Uji terima pengguna).</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: var(--indigo); margin-bottom: 10px;">Sitasi Standar Industri</h3>
+                    <div class="box" style="padding: 18px;">
+                        <ul style="font-size: 14px; padding-left: 18px; margin: 0; line-height: 1.7;">
+                            <li style="margin-bottom: 8px;"><strong>IEEE 830-1998:</strong> Recommended Practice for Software Requirements Specifications.</li>
+                            <li style="margin-bottom: 8px;"><strong>Sommerville, I. (2015):</strong> <em>Software Engineering (10th Ed)</em> - Requirements Engineering.</li>
+                            <li><strong>Pressman, R. S. (2014):</strong> <em>Software Engineering: A Practitioner's Approach (8th Ed)</em>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Tanya Jawab -->
+        <div class="slide">
+            <div class="content-center">
+                <h1 style="font-size: 64px;">Diskusi &<br><span class="highlight">Tanya Jawab</span></h1>
+                <p style="font-size: 22px; margin-top: 15px; color: var(--text-muted);">Mari kita mulai sesi simulasi roleplay "Biro Jodoh Aplikasi"!</p>
+                <div style="margin-top: 35px;">
+                    <button class="btn" onclick="goToSlide(11)" style="font-size: 18px; padding: 14px 28px;">Mulai Simulasi Kelas &#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Counter & Controls -->
+        <div class="slide-counter"><span id="current">1</span> / <span id="total">15</span></div>
+        
+        <div class="controls">
+            <button class="btn menu-btn" onclick="toggleJumpMenu()">&#9776; Daftar Slide</button>
+            <button class="btn" onclick="prevSlide()">&#8592; Prev</button>
+            <button class="btn" onclick="nextSlide()">Next &#8594;</button>
+        </div>
+
+        <!-- Jump Menu Drawer -->
+        <div class="jump-menu" id="jumpMenu"></div>
+
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const currentCounter = document.getElementById('current');
+        const totalCounter = document.getElementById('total');
+        const progressBar = document.getElementById('progressBar');
+        const jumpMenu = document.getElementById('jumpMenu');
+        const slideHeaderBrand = document.getElementById('slideHeaderBrand');
+
+        totalCounter.textContent = slides.length;
+
+        // Render Jump Menu Items
+        slides.forEach((slide, index) => {
+            const h2 = slide.querySelector('h2') || slide.querySelector('h1');
+            const titleText = h2 ? h2.innerText.replace(/\n/g, ' ') : `Slide ${index + 1}`;
+            const item = document.createElement('div');
+            item.className = 'jump-item';
+            item.innerText = `${index + 1}. ${titleText}`;
+            item.onclick = () => {
+                goToSlide(index);
+                toggleJumpMenu();
+            };
+            jumpMenu.appendChild(item);
+        });
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+            currentCounter.textContent = index + 1;
+            const progress = ((index + 1) / slides.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Tampilkan Header Logo di Pojok Kiri Atas hanya untuk Slide 2 ke atas
+            if (index > 0) {
+                slideHeaderBrand.style.display = 'flex';
+            } else {
+                slideHeaderBrand.style.display = 'none';
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+        }
+
+        function toggleJumpMenu() {
+            jumpMenu.classList.toggle('active');
+        }
+
+        function switchTab(btn, tabId) {
+            const container = btn.closest('.tab-container');
+            container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'Escape') {
+                jumpMenu.classList.remove('active');
+            }
+        });
+
+        // Close menu on click outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.controls') && !e.target.closest('.jump-menu')) {
+                jumpMenu.classList.remove('active');
+            }
+        });
+
+        // Fitur Preventif Klik Kanan (Disable Right Click)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
